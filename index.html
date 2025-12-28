@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Finance Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #eee;
+    }
+    input[type="number"] {
+      width: 90px;
+    }
+    .status-ok { color: green; font-weight: bold; }
+    .status-warn { color: orange; font-weight: bold; }
+    .status-bad { color: red; font-weight: bold; }
+    .scorecard td {
+      text-align: left;
+    }
+    .footer {
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Monthly Financial Dashboard</h1>
+
+    <h2>Income</h2>
+    <p><strong>Monthly Income:</strong> R2,700</p>
+
+    <h2>Budget Tracker</h2>
+    <table id="budgetTable">
+      <tr>
+        <th>Category</th>
+        <th>Budget (R)</th>
+        <th>Actual (R)</th>
+        <th>Status</th>
+      </tr>
+      <tr data-budget="1100"><td>Travel</td><td>1100</td><td><input type="number" /></td><td></td></tr>
+      <tr data-budget="500"><td>Emergency Fund</td><td>500</td><td><input type="number" /></td><td></td></tr>
+      <tr data-budget="300"><td>Investments</td><td>300</td><td><input type="number" /></td><td></td></tr>
+      <tr data-budget="200"><td>Toiletries</td><td>200</td><td><input type="number" /></td><td></td></tr>
+      <tr data-budget="250"><td>Clothes</td><td>250</td><td><input type="number" /></td><td></td></tr>
+      <tr data-budget="250"><td>Entertainment</td><td>250</td><td><input type="number" /></td><td></td></tr>
+      <tr data-budget="100"><td>Buffer</td><td>100</td><td><input type="number" /></td><td></td></tr>
+    </table>
+
+    <button onclick="calculateStatus()">Update Status</button>
+
+    <h2>Savings Progress</h2>
+    <table>
+      <tr><th>Goal</th><th>Current (R)</th><th>Target (R)</th></tr>
+      <tr><td>Emergency Fund</td><td><input type="number" /></td><td>6600</td></tr>
+      <tr><td>Investments</td><td><input type="number" /></td><td>3600</td></tr>
+    </table>
+
+    <h2>Monthly Scorecard</h2>
+    <table class="scorecard">
+      <tr><td>Emergency fund funded first?</td><td><input type="checkbox" /></td></tr>
+      <tr><td>Investments paid automatically?</td><td><input type="checkbox" /></td></tr>
+      <tr><td>Entertainment ≤ R250?</td><td><input type="checkbox" /></td></tr>
+      <tr><td>No money borrowed?</td><td><input type="checkbox" /></td></tr>
+      <tr><td>Tracked spending weekly?</td><td><input type="checkbox" /></td></tr>
+    </table>
+
+    <h2>Monthly Review</h2>
+    <textarea rows="3" style="width:100%;" placeholder="One honest sentence about this month"></textarea>
+
+    <p class="footer">This dashboard works only if you update it honestly. No excuses.</p>
+  </div>
+
+  <script>
+    function calculateStatus() {
+      const rows = document.querySelectorAll('#budgetTable tr[data-budget]');
+      rows.forEach(row => {
+        const budget = Number(row.dataset.budget);
+        const actual = Number(row.querySelector('input').value || 0);
+        const statusCell = row.children[3];
+        const diff = actual - budget;
+        if (diff <= 0) {
+          statusCell.textContent = 'OK';
+          statusCell.className = 'status-ok';
+        } else if (diff <= 50) {
+          statusCell.textContent = 'OVER';
+          statusCell.className = 'status-warn';
+        } else {
+          statusCell.textContent = 'BLOWN';
+          statusCell.className = 'status-bad';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
